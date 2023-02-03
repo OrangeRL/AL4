@@ -7,7 +7,6 @@
 #include "Object3d.h"
 #include "DebugText.h"
 #include"CollisionPrimitive.h"
-
 /// <summary>
 /// ゲームシーン
 /// </summary>
@@ -73,4 +72,6 @@ private: // メンバ変数
 	Plane plane;
 	//当たり判定　三角形
 	Triangle triangle;
+	//当たり判定　レイ
+	Ray ray;
 };
