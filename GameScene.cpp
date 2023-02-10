@@ -43,17 +43,23 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
 	//OBJからモデルデータを読み込む
 	model = Model::LoadFromOBJ("ground");
 	model1 = Model::LoadFromOBJ("chr_sword");
+	model2 = Model::LoadFromOBJ("triangle");
 	// 3Dオブジェクト生成
 	object3d1 = Object3d::Create();
 	object3d2 = Object3d::Create();
+	object3d3 = Object3d::Create();
 	//3Dオブジェクトと3Dモデルを紐づけ
 	object3d1->SetModel(model);
 	object3d2->SetModel(model1);
+	object3d3->SetModel(model2);
 
 	object3d1->SetScale(XMFLOAT3(planeScale));
 	object3d1->SetPosition(XMFLOAT3(planePos));
 	object3d2->SetScale(XMFLOAT3(playerScale));
 	object3d2->SetPosition(XMFLOAT3(playerPos));
+	object3d3->SetPosition({ 0.0f, 1.0f, 0.0f });
+	object3d3->SetRotation({ 1.0f, 0.0f, 0.0f });
+	object3d3->SetScale(XMFLOAT3(triangleScale));
 
 	//球の初期値を設定
 	sphere.center = XMVectorSet(0, 2, 0, 1);//中心座標
@@ -154,10 +160,9 @@ void GameScene::Update()
 			if (input->PushKey(DIK_D)) { sphere.center += moveX; }
 			else if (input->PushKey(DIK_A)) { sphere.center -= moveX; }
 		}
-
-		// 球と平面の当たり判定
-		inter;
-		hit = Collision::CheckSphere2Plane(sphere, plane, &inter);
+		//球と三角形の当たり判定
+	inter;
+	hit = Collision::CheckSphere2Triangle(sphere, triangle, &inter);
 		if (hit) {
 			color = { 1.0f,0.0f,0.0f,1.0f };
 			object3d2->SetColor(color);
@@ -167,7 +172,7 @@ void GameScene::Update()
 			color = { 1.0f,1.0f,1.0f,1.0f };
 			object3d2->SetColor(color);
 		}
-
+	
 		object3d2->SetPosition({ sphere.center.m128_f32[0],sphere.center.m128_f32[1], sphere.center.m128_f32[2] });
 		// カメラ移動
 		if (input->PushKey(DIK_UP) || input->PushKey(DIK_DOWN) || input->PushKey(DIK_RIGHT) || input->PushKey(DIK_LEFT))
@@ -177,9 +182,9 @@ void GameScene::Update()
 			if (input->PushKey(DIK_RIGHT)) { Object3d::CameraMoveVector({ +0.2f,0.0f,0.0f }); }
 			else if (input->PushKey(DIK_LEFT)) { Object3d::CameraMoveVector({ -0.2f,0.0f,0.0f }); }
 		}
-
+		object3d3->SetScale(XMFLOAT3(triangleScale));
 		//3Dオブジェクト更新
-		object3d1->Update();
+		object3d3->Update();
 		object3d2->Update();
 		break;
 	}
@@ -223,11 +228,13 @@ void GameScene::Draw()
 	case GameScene::Scene::CirclePlane:
 		object3d1->Draw();
 		object3d2->Draw();
-		ImGui::DragFloat3("PlayerScale", playerScale, 0.1f, 0.0f, 10.0f);
-		ImGui::DragFloat3("PlayerPosition", sphere.center.m128_f32, 0.1f, 0.0f, 10.0f);
+		ImGui::DragFloat3("PlayerPosition", sphere.center.m128_f32, 0.1f, -10.0f, 10.0f);
 		break;
 	case GameScene::Scene::CircleTriangle:
-
+		object3d3->Draw();
+		object3d2->Draw();
+		ImGui::DragFloat3("PlayerPosition", sphere.center.m128_f32, 0.1f, -10.0f, 10.0f);
+		ImGui::DragFloat3("Triangle", triangleScale, 0.1f, -10.0f, 10.0f);
 		break;
 	}
 

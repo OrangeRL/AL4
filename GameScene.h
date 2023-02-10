@@ -74,6 +74,7 @@ private: // メンバ変数
 
 	Model* model = nullptr;
 	Model* model1 = nullptr;
+	Model* model2 = nullptr;
 	//当たり判定　球
 	Sphere sphere;
 	//当たり判定　平面
@@ -87,4 +88,5 @@ private: // メンバ変数
 	float playerScale[3] = { 1.0f,1.0f,1.0f };
 	float planePos[3] = { 1.0f,1.0f,1.0f };
 	float planeScale[3] = { 0.1f,0.1f,0.1f };
+	float triangleScale[3] = { 3.0f,0.0f,3.0f };
 };
