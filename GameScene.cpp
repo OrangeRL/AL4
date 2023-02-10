@@ -219,7 +219,7 @@ void GameScene::Draw()
 	ImGui::Begin("CONTROLLER");
 	ImGui::SetWindowPos(ImVec2(0, 0));
 	ImGui::SetWindowSize(ImVec2(500, 100));
-	ImGui::Combo("Scene", (int*)&scene_, "Empty\0Circle Plane\0Circle Triangle\0Scene 3\0");
+	ImGui::Combo("Scene", (int*)&scene_, "Start\0Circle Plane\0Circle Triangle");
 	
 	switch (scene_) {
 	case GameScene::Scene::Empty:
